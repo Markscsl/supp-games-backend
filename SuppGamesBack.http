@@ -1,0 +1,6 @@
+@SuppGamesBack_HostAddress = http://localhost:5096
+
+GET {{SuppGamesBack_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
