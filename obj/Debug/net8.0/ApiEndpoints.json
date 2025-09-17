@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "SuppGamesBack.Controllers.RawgController",
+    "Method": "SearchGames",
+    "RelativePath": "api/Rawg/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SuppGamesBack.Controllers.UsersController",
     "Method": "GetAllUsers",
     "RelativePath": "api/Users",
@@ -9,7 +25,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[SuppGamesBack.Models.User, SuppGamesBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "SuppGamesBack.Models.User",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -35,7 +51,95 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[SuppGamesBack.Models.User, SuppGamesBack, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "SuppGamesBack.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.UsersController",
+    "Method": "GetUserById",
+    "RelativePath": "api/Users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SuppGamesBack.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/Users/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "user",
+        "Type": "SuppGamesBack.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SuppGamesBack.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.UsersController",
+    "Method": "DeactiveUser",
+    "RelativePath": "api/Users/deactive/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "user",
+        "Type": "SuppGamesBack.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SuppGamesBack.Models.User",
         "MediaTypes": [
           "text/plain",
           "application/json",

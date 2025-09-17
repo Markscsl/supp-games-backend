@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SuppGamesBack.Data;
+using SuppGamesBack.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,10 @@ var connectionString = builder.Configuration.GetConnectionString("AppDbConnectio
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRawgClient, RawgClient>();
 
 var app = builder.Build();
 
