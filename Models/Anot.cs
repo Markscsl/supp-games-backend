@@ -1,19 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SuppGamesBack.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SuppGamesBack.Models
-{
-    public class Annotation
+    public class Anot
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Text { get; set; }
-        [ForeignKey("FavoriteGame")]
-        public int FavoriteGameId { get; set; }
         public virtual FavoriteGame? FavoriteGame { get; set; }
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [ForeignKey("FavoriteGameId")]
+        public int FavoriteGameId { get; set; }
         public virtual User? User { get; set; }
         [Required]
         public DateTime CreateDateAt { get; set; }
@@ -21,4 +18,4 @@ namespace SuppGamesBack.Models
         public DateTime LastUpdatedAt { get; set; }
         public bool Excluded { get; set; }
     }
-}
+

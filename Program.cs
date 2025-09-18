@@ -19,6 +19,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRawgClient, RawgClient>();
+builder.Services.AddScoped<IFavoriteGameRepository, FavoriteGameRepository>();
+builder.Services.AddScoped<IAnnotationRepository, AnnotationRepository>();
 
 var app = builder.Build();
 

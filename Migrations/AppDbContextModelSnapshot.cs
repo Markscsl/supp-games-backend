@@ -22,7 +22,7 @@ namespace SuppGamesBack.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SuppGamesBack.Models.Annotation", b =>
+            modelBuilder.Entity("Anot", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,9 +39,6 @@ namespace SuppGamesBack.Migrations
                     b.Property<int>("FavoriteGameId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FavoriteGameId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -49,21 +46,14 @@ namespace SuppGamesBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FavoriteGameId");
 
-                    b.HasIndex("FavoriteGameId1");
-
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Annotations");
                 });
@@ -119,14 +109,9 @@ namespace SuppGamesBack.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("FavoriteGames");
                 });
@@ -150,32 +135,26 @@ namespace SuppGamesBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SuppGamesBack.Models.Annotation", b =>
+            modelBuilder.Entity("Anot", b =>
                 {
                     b.HasOne("SuppGamesBack.Models.FavoriteGame", "FavoriteGame")
-                        .WithMany()
-                        .HasForeignKey("FavoriteGameId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SuppGamesBack.Models.FavoriteGame", null)
                         .WithMany("Annotations")
-                        .HasForeignKey("FavoriteGameId1");
+                        .HasForeignKey("FavoriteGameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SuppGamesBack.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SuppGamesBack.Models.User", null)
-                        .WithMany("Annotations")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("FavoriteGame");
 
@@ -185,14 +164,10 @@ namespace SuppGamesBack.Migrations
             modelBuilder.Entity("SuppGamesBack.Models.FavoriteGame", b =>
                 {
                     b.HasOne("SuppGamesBack.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("SuppGamesBack.Models.User", null)
                         .WithMany("FavoriteGames")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -204,8 +179,6 @@ namespace SuppGamesBack.Migrations
 
             modelBuilder.Entity("SuppGamesBack.Models.User", b =>
                 {
-                    b.Navigation("Annotations");
-
                     b.Navigation("FavoriteGames");
                 });
 #pragma warning restore 612, 618

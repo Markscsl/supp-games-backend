@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SuppGamesBack.Models;
+
 
 namespace SuppGamesBack.Models
 {
@@ -24,7 +26,7 @@ namespace SuppGamesBack.Models
         [Required]
         public DateTime ReleaseDate { get; set; }
         public bool Excluded { get; set; }
-        [ForeignKey("User")]
+        [ForeignKey("UserId")]
         public int UserId { get; set; }
         public virtual User? User { get; set; }
         [Required]
@@ -32,6 +34,6 @@ namespace SuppGamesBack.Models
         [Required]
         public DateTime LastUpdate { get; set; }
 
-        public virtual ICollection<Annotation> Annotations { get; set; } = new List<Annotation>();
+        public virtual ICollection<Anot> Annotations { get; set; } = new List<Anot>();
     }
 }

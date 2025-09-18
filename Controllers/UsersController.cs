@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using SuppGamesBack.Models.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using SuppGamesBack.Data;
 using SuppGamesBack.Models;
-
 
 namespace SuppGamesBack.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+
         public UsersController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -17,76 +19,102 @@ namespace SuppGamesBack.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<User>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserReponseDTO>>> GetAllUsers()
         {
             var users = await _userRepository.GetAllAsync();
-            return Ok(users);
-        }
 
-        [HttpPost]
+            var usersDto = users.Select(user => new UserReponseDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                IsAtivo = user.IsAtivo,
+            }).ToList();
 
-        public async Task<ActionResult<User>> AddUser(User user)
-        {
-            user = await _userRepository.AddAsync(user);
-            return CreatedAtAction(nameof(GetUserById), new {id = user.Id}, user);
+            return Ok(usersDto);
         }
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<User>> GetUserById(int id)
+        public async Task<ActionResult<UserReponseDTO>> GetUserById(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null)
             {
-                return NotFound("Usuário não encontrado!");
+                return NotFound("Usuário não encontrado.");
             }
 
-            return Ok(user);
+            var userDto = new UserReponseDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                IsAtivo = user.IsAtivo
+            };
+
+            return Ok(userDto);
+        }
+
+        [HttpPost]
+
+        public async Task<ActionResult<UserReponseDTO>> AddUser([FromBody] CreateUserDTO userDto)
+        {
+            var newUser = new User
+            {
+                Name = userDto.Name,
+                Email = userDto.Email,
+                Password = userDto.Password,
+                IsAtivo = true
+            };
+
+            var createdUser = await _userRepository.AddAsync(newUser);
+
+            var responseDto = new UserReponseDTO
+            {
+                Id = createdUser.Id,
+                Name = createdUser.Name,
+                Email = createdUser.Email,
+                IsAtivo = createdUser.IsAtivo
+            };
+
+            return CreatedAtAction(nameof(GetUserById), new { id  = newUser.Id }, responseDto);
         }
 
         [HttpPut("{id}")]
-
-        public async Task<ActionResult<User>> UpdateUser(int id, User user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userDto)
         {
-
-            if (id != user.Id)
-            {
-                return BadRequest("O ID fornecido não corresponde.");
-            }
-
             var existingUser = await _userRepository.GetByIdAsync(id);
 
-            if(user == null)
+            
+            if (existingUser == null)
             {
                 return NotFound("Usuário não encontrado.");
             }
 
-            await _userRepository.UpdateAsync(user);
+            existingUser.Name = userDto.Name;
+            existingUser.Email = userDto.Email;
+
+            
+            await _userRepository.UpdateAsync(existingUser);
 
             return NoContent();
         }
 
-        [HttpPut("deactive/{id}")]
-
-        public async Task<ActionResult<User>> DeactiveUser(int id, User user)
+        [HttpPut("deactivate/{id}")]
+        public async Task<IActionResult> DeactivateUser(int id)
         {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
+            var existingUser = await _userRepository.GetByIdAsync(id);
 
-            if(user == null)
+            if (existingUser == null)
             {
                 return NotFound();
             }
 
-            user.IsAtivo = false;
-
-            await _userRepository.UpdateAsync(user);
+            existingUser.IsAtivo = false;
+            await _userRepository.UpdateAsync(existingUser);
 
             return NoContent();
         }
-
     }
 }

@@ -5,6 +5,6 @@ namespace SuppGamesBack.Services
     public interface IRawgClient
     {
         Task<RawgSearchResponse> SearchGamesAsync(string query);
-
+        Task<GameResult> GetGameBySlugAsync(string slug);
     }
 }

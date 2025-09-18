@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
-
-namespace SuppGamesBack.Data
+﻿namespace SuppGamesBack.Data
 {
     public interface IAnnotationRepository
     {
-        Task<List<Annotation>> GetAllAsync();
-        Task<Annotation> GetByIdAsync(int id);
-        Task<Annotation> AddAsync(Annotation annotation);
-        Task UpdateAsync(Annotation annotation);
-        Task DeleteAsync(int id);
+        Task<List<Anot>> GetAllAsync();
+        Task<Anot> GetByIdAsync(int id);
+        Task<Anot> AddAsync(Anot anot);
+        Task UpdateAsync(Anot anot);
+        Task<bool> DeleteAsync(int id);
     }
 }

@@ -24,6 +24,8 @@ namespace SuppGamesBack.Data
 
         public async Task<User> AddAsync(User user)
         {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
             _appDbContext.Users.Add(user);
             await _appDbContext.SaveChangesAsync();
             return user;
@@ -39,7 +41,8 @@ namespace SuppGamesBack.Data
         public async Task<bool> DeleteAsync(int id)
         {
             var userToDelete = await _appDbContext.Users.FindAsync(id);
-            if (userToDelete != null)
+
+            if (userToDelete == null)
             {
                 return false;
             }

@@ -19,6 +19,7 @@ namespace SuppGamesBack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAtivo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -43,8 +44,7 @@ namespace SuppGamesBack.Migrations
                     Excluded = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: true)
+                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,12 +53,8 @@ namespace SuppGamesBack.Migrations
                         name: "FK_FavoriteGames_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_FavoriteGames_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,12 +65,10 @@ namespace SuppGamesBack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FavoriteGameId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreateDateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Excluded = table.Column<bool>(type: "bit", nullable: false),
-                    FavoriteGameId1 = table.Column<int>(type: "int", nullable: true),
-                    UserId1 = table.Column<int>(type: "int", nullable: true)
+                    Excluded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,20 +77,11 @@ namespace SuppGamesBack.Migrations
                         name: "FK_Annotations_FavoriteGames_FavoriteGameId",
                         column: x => x.FavoriteGameId,
                         principalTable: "FavoriteGames",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Annotations_FavoriteGames_FavoriteGameId1",
-                        column: x => x.FavoriteGameId1,
-                        principalTable: "FavoriteGames",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Annotations_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Annotations_Users_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
@@ -107,29 +92,14 @@ namespace SuppGamesBack.Migrations
                 column: "FavoriteGameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Annotations_FavoriteGameId1",
-                table: "Annotations",
-                column: "FavoriteGameId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Annotations_UserId",
                 table: "Annotations",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Annotations_UserId1",
-                table: "Annotations",
-                column: "UserId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteGames_UserId",
                 table: "FavoriteGames",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FavoriteGames_UserId1",
-                table: "FavoriteGames",
-                column: "UserId1");
         }
 
         /// <inheritdoc />
