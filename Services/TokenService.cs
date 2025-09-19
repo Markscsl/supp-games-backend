@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SuppGamesBack.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
@@ -32,7 +33,11 @@ namespace SuppGamesBack.Services
                 Expires = DateTime.UtcNow.AddHours(8),
                 SigningCredentials = creds
             };
-            return "";
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
 
     }

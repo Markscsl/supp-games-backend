@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SuppGamesBack.Data;
 using SuppGamesBack.Models;
+using SuppGamesBack.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SuppGamesBack.Controllers
 {
@@ -11,9 +14,10 @@ namespace SuppGamesBack.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-
-        public UsersController(IUserRepository userRepository)
+        private readonly ITokenService _tokenService;
+        public UsersController(IUserRepository userRepository, ITokenService tokenService)
         {
+            _tokenService = tokenService;
             _userRepository = userRepository;
         }
 
@@ -60,6 +64,13 @@ namespace SuppGamesBack.Controllers
 
         public async Task<ActionResult<UserReponseDTO>> AddUser([FromBody] CreateUserDTO userDto)
         {
+            var existingUser = await _userRepository.GetByEmailAsync(userDto.Email);
+
+            if (existingUser != null)
+            {
+                return Conflict("Este email ja está em uso.");
+            }
+
             var newUser = new User
             {
                 Name = userDto.Name,
@@ -118,12 +129,13 @@ namespace SuppGamesBack.Controllers
         }
 
         [HttpPost("change-password/")]
+        [Authorize]
 
         public async Task<ActionResult> ChangePassword([FromBody] NewPasswordDTO newPassword)
         {
-            var userId = 6;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var existingUser = await _userRepository.GetByIdAsync(userId);
+            var existingUser = await _userRepository.GetByIdAsync(int.Parse(userId));
 
             if (existingUser == null)
             {
@@ -162,7 +174,9 @@ namespace SuppGamesBack.Controllers
                 return BadRequest("Senha ou email incorretos.");
             }
 
-            return Ok("Login realizado com sucesso\nRedirecionando...");
+            var token = _tokenService.CreateToken(existingUser);
+
+            return Ok(new { token = token });
         }
     }
 }
