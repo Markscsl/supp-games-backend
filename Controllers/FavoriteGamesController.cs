@@ -69,6 +69,8 @@ namespace SuppGamesBack.Controllers
                 Name = createdGame.Name,
                 Slug = createdGame.Slug,
                 ImageUrl = createdGame.ImageUrl,
+                Platform = createdGame.Platform,
+                Gender = createdGame.Gender,
                 Description = createdGame.Description,
                 ReleaseDate = createdGame.ReleaseDate
             };

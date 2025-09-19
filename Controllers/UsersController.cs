@@ -116,5 +116,53 @@ namespace SuppGamesBack.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("change-password/")]
+
+        public async Task<ActionResult> ChangePassword([FromBody] NewPasswordDTO newPassword)
+        {
+            var userId = 6;
+
+            var existingUser = await _userRepository.GetByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            bool isCurrentPasswordCorrect = BCrypt.Net.BCrypt.Verify(newPassword.CurrentPassword, existingUser.Password);
+
+            if (!isCurrentPasswordCorrect)
+            {
+                return BadRequest("A senha atual está incorreta.");
+            }
+
+            existingUser.Password = BCrypt.Net.BCrypt.HashPassword(newPassword.NewPassword);
+
+            await _userRepository.UpdateAsync(existingUser);
+
+            return Ok("Senha alterada com sucesso.");
+        }
+
+        [HttpGet("login/")]
+
+        public async Task<IActionResult> UserLogin([FromBody] LoginUserDTO loginUser)
+        {
+            var existingUser = await _userRepository.GetByEmailAsync(loginUser.Email);
+
+            if (existingUser == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            bool passVerify = BCrypt.Net.BCrypt.Verify(loginUser.Password, existingUser.Password);
+
+            if (!passVerify)
+            {
+                return BadRequest("Senha ou email incorretos.");
+            }
+
+            return Ok("Login realizado com sucesso\nRedirecionando...");
+        }
     }
 }

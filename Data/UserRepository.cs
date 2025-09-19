@@ -51,5 +51,10 @@ namespace SuppGamesBack.Data
             await _appDbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _appDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
+        }
     }
 }
