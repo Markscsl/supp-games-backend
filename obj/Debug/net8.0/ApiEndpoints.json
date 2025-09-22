@@ -1,5 +1,68 @@
 [
   {
+    "ContainingType": "SuppGamesBack.Controllers.AnnotationsController",
+    "Method": "AddAnnotation",
+    "RelativePath": "api/Annotations",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "annotationDTO",
+        "Type": "SuppGamesBack.Models.DTOs.CreateAnnotationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.AnnotationsController",
+    "Method": "GetAllAnnotations",
+    "RelativePath": "api/Annotations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.AnnotationsController",
+    "Method": "UpdateAnnotation",
+    "RelativePath": "api/Annotations",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "updateAnnotationDto",
+        "Type": "SuppGamesBack.Models.DTOs.UpdateAnnotationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.AnnotationsController",
+    "Method": "DeleteAnnotation",
+    "RelativePath": "api/Annotations",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SuppGamesBack.Controllers.FavoriteGamesController",
     "Method": "AddFavoriteGame",
     "RelativePath": "api/FavoriteGames",
@@ -13,6 +76,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.FavoriteGamesController",
+    "Method": "GetMyFavoriteGames",
+    "RelativePath": "api/FavoriteGames",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -41,22 +114,6 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SuppGamesBack.Controllers.FavoriteGamesController",
-    "Method": "GetFavoriteGamesByUserId",
-    "RelativePath": "api/FavoriteGames/user/{userId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       }

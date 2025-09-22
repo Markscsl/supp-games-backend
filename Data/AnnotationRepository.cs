@@ -11,6 +11,11 @@ namespace SuppGamesBack.Data
             _appDbContext = appDbContext;
         }
 
+        public async Task<List<Anot>> GetAllByUserId(int userId)
+        {
+            return await _appDbContext.Annotations.Include(a => a.FavoriteGame).Where(a => a.FavoriteGame.UserId == userId).ToListAsync();
+        }
+
         public async Task<List<Anot>> GetAllAsync()
         {
             return await _appDbContext.Annotations.ToListAsync();
