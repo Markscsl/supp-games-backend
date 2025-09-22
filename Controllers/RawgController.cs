@@ -21,5 +21,19 @@ namespace SuppGamesBack.Controllers
             var games = await _rawgClient.SearchGamesAsync(query);
             return Ok(games);
         }
+
+        [HttpGet("random-game")]
+
+        public async Task<IActionResult> GetRandomGame()
+        {
+            var game = await _rawgClient.GetRandomGameAsync();
+            
+            if(game == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(game);
+        }
     }
 }

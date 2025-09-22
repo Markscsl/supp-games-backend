@@ -66,7 +66,16 @@ namespace SuppGamesBack.Controllers
 
             var createdAnnotation = await _annotationRepository.AddAsync(newAnnotation);
 
-            return CreatedAtAction("GetAnnotationById", new { id = createdAnnotation.Id }, createdAnnotation);
+            var responseDto = new AnnotationResponseDTO
+            {
+                Id = createdAnnotation.Id,
+                FavoriteGameId = createdAnnotation.FavoriteGameId,
+                Text = createdAnnotation.Text,
+                CreatedDateAt = createdAnnotation.CreateDateAt,
+                LastUpdateAt = createdAnnotation.LastUpdatedAt,
+            };
+
+            return CreatedAtAction("GetAnnotationById", new { id = createdAnnotation.Id }, responseDto);
         }
 
         [HttpGet]

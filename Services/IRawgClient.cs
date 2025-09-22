@@ -6,5 +6,6 @@ namespace SuppGamesBack.Services
     {
         Task<RawgSearchResponse> SearchGamesAsync(string query);
         Task<GameResult> GetGameBySlugAsync(string slug);
+        Task<GameResult?> GetRandomGameAsync();
     }
 }

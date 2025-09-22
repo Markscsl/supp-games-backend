@@ -37,7 +37,26 @@ namespace SuppGamesBack.Services
             return gameResult;
         }
 
+        public async Task<GameResult?> GetRandomGameAsync()
+        {
+            var random = new Random();
 
+            int randomPage = random.Next(1, 101);
+
+            var response = await _httpClient.GetAsync($"https://api.rawg.io/api/games?key={_apiKey}&page={randomPage}&page_size=40&ordering=-rating");
+            response.EnsureSuccessStatusCode();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var searchResults = JsonSerializer.Deserialize<RawgSearchResponse>(jsonString);
+
+            if (searchResults?.results == null || !searchResults.results.Any())
+            {
+                return null;
+            }
+
+            int randomIndex = random.Next(0, searchResults.results.Count);
+            return searchResults.results[randomIndex];
+        }
 
     }
 }

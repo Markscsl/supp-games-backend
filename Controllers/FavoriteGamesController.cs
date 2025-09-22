@@ -81,12 +81,15 @@ namespace SuppGamesBack.Controllers
         public async Task<IActionResult> GetMyFavoriteGames()
         {
             var userId = GetCurrentUserId();
-            if (userId == null) return Unauthorized();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
 
             var favoriteGames = await _favoriteGameRepo.GetByUserIdAsync(userId.Value);
 
   
-            var response = favoriteGames.Select(fg => new Game 
+            var response = favoriteGames.Select(fg => new GameResponseDTO
             {
                 Id = fg.Game.Id,
                 Name = fg.Game.Name,
