@@ -12,6 +12,25 @@ namespace SuppGamesBack.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Games",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Platform = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Genres = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Games", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -33,22 +52,20 @@ namespace SuppGamesBack.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    e_favorite = table.Column<bool>(type: "bit", nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Platform = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Excluded = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    GameId = table.Column<int>(type: "int", nullable: false),
+                    Excluded = table.Column<bool>(type: "bit", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FavoriteGames", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FavoriteGames_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FavoriteGames_Users_UserId",
                         column: x => x.UserId,
@@ -65,7 +82,6 @@ namespace SuppGamesBack.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FavoriteGameId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: true),
                     CreateDateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Excluded = table.Column<bool>(type: "bit", nullable: false)
@@ -79,11 +95,6 @@ namespace SuppGamesBack.Migrations
                         principalTable: "FavoriteGames",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Annotations_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -92,9 +103,9 @@ namespace SuppGamesBack.Migrations
                 column: "FavoriteGameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Annotations_UserId",
-                table: "Annotations",
-                column: "UserId");
+                name: "IX_FavoriteGames_GameId",
+                table: "FavoriteGames",
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FavoriteGames_UserId",
@@ -110,6 +121,9 @@ namespace SuppGamesBack.Migrations
 
             migrationBuilder.DropTable(
                 name: "FavoriteGames");
+
+            migrationBuilder.DropTable(
+                name: "Games");
 
             migrationBuilder.DropTable(
                 name: "Users");

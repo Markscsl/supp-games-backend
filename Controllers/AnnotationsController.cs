@@ -164,6 +164,8 @@ namespace SuppGamesBack.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAnnotationById(int id)
         {
             var userFromIdToken = GetCurrentUser();
@@ -197,6 +199,7 @@ namespace SuppGamesBack.Controllers
             };
 
             return Ok(responseDto);
+
         }
     }
 }

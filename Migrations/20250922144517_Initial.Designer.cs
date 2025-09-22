@@ -12,7 +12,7 @@ using SuppGamesBack.Data;
 namespace SuppGamesBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250918173042_Initial")]
+    [Migration("20250922144517_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -49,14 +49,9 @@ namespace SuppGamesBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FavoriteGameId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Annotations");
                 });
@@ -72,34 +67,47 @@ namespace SuppGamesBack.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Excluded")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FavoriteGames");
+                });
+
+            modelBuilder.Entity("SuppGamesBack.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Genres")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsFavorite")
-                        .HasColumnType("bit")
-                        .HasColumnName("e_favorite");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Platform")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReleaseDate")
@@ -109,14 +117,9 @@ namespace SuppGamesBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FavoriteGames");
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("SuppGamesBack.Models.User", b =>
@@ -155,22 +158,24 @@ namespace SuppGamesBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuppGamesBack.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("FavoriteGame");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SuppGamesBack.Models.FavoriteGame", b =>
                 {
+                    b.HasOne("SuppGamesBack.Models.Game", "Game")
+                        .WithMany("FavoriteGames")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SuppGamesBack.Models.User", "User")
                         .WithMany("FavoriteGames")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
 
                     b.Navigation("User");
                 });
@@ -178,6 +183,11 @@ namespace SuppGamesBack.Migrations
             modelBuilder.Entity("SuppGamesBack.Models.FavoriteGame", b =>
                 {
                     b.Navigation("Annotations");
+                });
+
+            modelBuilder.Entity("SuppGamesBack.Models.Game", b =>
+                {
+                    b.Navigation("FavoriteGames");
                 });
 
             modelBuilder.Entity("SuppGamesBack.Models.User", b =>

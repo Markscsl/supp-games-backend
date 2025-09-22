@@ -11,3 +11,4 @@ namespace SuppGamesBack.Models.DTOs
         public string Text { get; set; }
     }
 }
+

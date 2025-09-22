@@ -15,6 +15,18 @@ namespace SuppGamesBack.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
+
+        private int? GetCurrentUser()
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(userIdString, out var userId))
+            {
+                return userId;
+            }
+
+            return null;
+        }
         public UsersController(IUserRepository userRepository, ITokenService tokenService)
         {
             _tokenService = tokenService;
@@ -60,7 +72,7 @@ namespace SuppGamesBack.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost]
+        [HttpPost("register")]
 
         public async Task<ActionResult<UserReponseDTO>> AddUser([FromBody] CreateUserDTO userDto)
         {
@@ -93,10 +105,22 @@ namespace SuppGamesBack.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDTO userDto)
         {
-            var existingUser = await _userRepository.GetByIdAsync(id);
+            var userIdFromToken = GetCurrentUser();
 
+            if (userIdFromToken == null)
+            {
+                return Unauthorized();
+            }
+
+            if (id != userIdFromToken)
+            {
+                return Forbid("ACESSO NEGADO!");
+            }
+
+            var existingUser = await _userRepository.GetByIdAsync(id);
             
             if (existingUser == null)
             {
@@ -106,15 +130,29 @@ namespace SuppGamesBack.Controllers
             existingUser.Name = userDto.Name;
             existingUser.Email = userDto.Email;
 
-            
             await _userRepository.UpdateAsync(existingUser);
 
             return NoContent();
         }
 
         [HttpPut("deactivate/{id}")]
+        [Authorize]
+
         public async Task<IActionResult> DeactivateUser(int id)
         {
+            var userIdFromToken = GetCurrentUser();
+
+            if (userIdFromToken == null)
+            {
+                return Unauthorized();
+            }
+
+            if (id != userIdFromToken)
+            {
+                return Forbid("ACESSO NEGADO!");
+            }
+
+
             var existingUser = await _userRepository.GetByIdAsync(id);
 
             if (existingUser == null)
@@ -156,10 +194,11 @@ namespace SuppGamesBack.Controllers
             return Ok("Senha alterada com sucesso.");
         }
 
-        [HttpGet("login/")]
+        [HttpPost("login")]
 
         public async Task<IActionResult> UserLogin([FromBody] LoginUserDTO loginUser)
         {
+
             var existingUser = await _userRepository.GetByEmailAsync(loginUser.Email);
 
             if (existingUser == null)

@@ -6,8 +6,5 @@ namespace SuppGamesBack.Models.DTOs
     {
         [Required]
         public string Slug { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
     }
 }

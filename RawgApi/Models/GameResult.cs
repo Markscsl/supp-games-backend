@@ -16,5 +16,25 @@ namespace SuppGamesBack.RawgApi.Models
 
         [JsonPropertyName("released")]
         public string? ReleaseDate { get; set; }
+
+        public List<PlatformContainer>? platforms { get; set; }
+        public List<Genre> genre { get; set; }
+    }
+
+    public class PlatformContainer
+    {
+        public Platform? platform { get; set; }
+    }
+
+    public class Platform
+    {
+        public int id { get; set; }
+        public string? name { get; set; }
+    }
+
+    public class Genre
+    {
+        public int id { get; set; }
+        public string? name { get; set; }
     }
 }

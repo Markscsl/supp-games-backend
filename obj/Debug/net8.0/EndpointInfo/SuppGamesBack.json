@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "SuppGamesBack",
-    "version": "1.0"
+    "title": "SuppGames API",
+    "version": "v1"
   },
   "paths": {
     "/api/Annotations": {
@@ -44,7 +44,9 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Annotations/{id}": {
       "put": {
         "tags": [
           "Annotations"
@@ -52,7 +54,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -91,7 +94,29 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -146,35 +171,14 @@
         }
       }
     },
-    "/api/FavoriteGames/{id}": {
-      "get": {
-        "tags": [
-          "FavoriteGames"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
+    "/api/FavoriteGames/{gameId}": {
       "delete": {
         "tags": [
           "FavoriteGames"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "gameId",
             "in": "path",
             "required": true,
             "schema": {
@@ -242,52 +246,6 @@
                   "items": {
                     "$ref": "#/components/schemas/UserReponseDTO"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserReponseDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserReponseDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserReponseDTO"
                 }
               }
             }
@@ -375,6 +333,54 @@
         }
       }
     },
+    "/api/Users/register": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserReponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserReponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserReponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/deactivate/{id}": {
       "put": {
         "tags": [
@@ -430,7 +436,7 @@
       }
     },
     "/api/Users/login": {
-      "get": {
+      "post": {
         "tags": [
           "Users"
         ],
@@ -483,18 +489,13 @@
       },
       "CreateFavoriteGameDTO": {
         "required": [
-          "slug",
-          "userId"
+          "slug"
         ],
         "type": "object",
         "properties": {
           "slug": {
             "minLength": 1,
             "type": "string"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -625,6 +626,19 @@
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Insira o token JWT desta forma: Bearer {seu token}",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }
