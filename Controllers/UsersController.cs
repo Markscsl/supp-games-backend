@@ -217,5 +217,28 @@ namespace SuppGamesBack.Controllers
 
             return Ok(new { token = token });
         }
+
+        [HttpGet("public-lists")]
+        public async Task<ActionResult<List<PublicUserListDTO>>> GetPublicUserLists([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            
+            var usersWithFavorites = await _userRepository.GetPagedUsersWithFavoritesAsync(pageNumber, pageSize);
+
+            
+            var response = usersWithFavorites.Select(user => new PublicUserListDTO
+            {
+                UserId = user.Id,
+                UserName = user.Name,
+
+                FavoriteGames = user.FavoriteGames.Select(favGame => new PublicGameInfoDTO
+                {
+                    Id = favGame.Game.Id,
+                    Name = favGame.Game.Name,
+                    ImageUrl = favGame.Game.ImageUrl
+                }).ToList()
+            }).ToList();
+
+            return Ok(response);
+        }
     }
 }

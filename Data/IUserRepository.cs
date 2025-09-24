@@ -10,5 +10,6 @@ namespace SuppGamesBack.Data
         Task<User> UpdateAsync(User user);
         Task<bool> DeleteAsync(int id);
         Task<User> GetByEmailAsync(string email);
+        Task<List<User>> GetPagedUsersWithFavoritesAsync(int pageNumber, int pageSize); 
     }
 }

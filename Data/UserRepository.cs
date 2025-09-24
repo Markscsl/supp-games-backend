@@ -56,5 +56,17 @@ namespace SuppGamesBack.Data
         {
             return await _appDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
         }
+
+        public async Task<List<User>> GetPagedUsersWithFavoritesAsync (int pageNumber,  int pageSize)
+        {
+            var itemsToSkip = (pageNumber - 1) * pageSize;
+
+            return await _appDbContext.Users.Include(u => u.FavoriteGames)
+                .ThenInclude(fg => fg.Game)
+                .OrderBy(u => u.Name)
+                .Skip(itemsToSkip)
+                .Take(pageSize)
+                .ToListAsync(); 
+        }
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SuppGamesBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0bfc07c66e5e6ee7cb0770c265196308be6e7406")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a04ca65f31a4cd69eb6e1fde458e7fcc3671f9db")]
 [assembly: System.Reflection.AssemblyProductAttribute("SuppGamesBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SuppGamesBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

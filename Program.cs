@@ -5,32 +5,51 @@ using Microsoft.OpenApi.Models;
 using SuppGamesBack.Data;
 using SuppGamesBack.Services;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "SuppGames API", Version = "v1" });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {  });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement {  });
-});
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "Insira o token JWT desta forma: Bearer {seu token}"
+    });
+
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
-            policy.WithOrigins("http://localhost:8080", "http://localhost:3000")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
 
 builder.Services.AddAuthentication(options =>

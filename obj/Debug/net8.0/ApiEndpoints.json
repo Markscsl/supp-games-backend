@@ -122,6 +122,16 @@
   },
   {
     "ContainingType": "SuppGamesBack.Controllers.RawgController",
+    "Method": "GetRandomGame",
+    "RelativePath": "api/Rawg/random-game",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SuppGamesBack.Controllers.RawgController",
     "Method": "SearchGames",
     "RelativePath": "api/Rawg/search",
     "HttpMethod": "GET",

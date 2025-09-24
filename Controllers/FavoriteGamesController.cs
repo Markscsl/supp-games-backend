@@ -32,7 +32,10 @@ namespace SuppGamesBack.Controllers
         public async Task<IActionResult> FavoriteGame([FromBody] CreateFavoriteGameDTO favoriteDto)
         {
             var userId = GetCurrentUserId();
-            if (userId == null) return Unauthorized();
+            if (userId == null) 
+            { 
+                return Unauthorized(); 
+            }
 
 
             var game = await _gameRepo.GetBySlugAsync(favoriteDto.Slug);
@@ -43,7 +46,7 @@ namespace SuppGamesBack.Controllers
                 if (rawgGame == null) return NotFound("Jogo não encontrado na base de dados externa.");
 
                 var platformNames = rawgGame.platforms?.Select(p => p.platform.name).ToList() ?? new List<string?>();
-                var genresNames = rawgGame.genre?.Select(g => g.name).ToList() ?? new List<string?>();
+                var genresNames = rawgGame.genres?.Select(g => g.name).ToList() ?? new List<string?>();
            
                 game = new Game
                 {
@@ -53,7 +56,7 @@ namespace SuppGamesBack.Controllers
                     ImageUrl = rawgGame.ImageUrl ?? "",
                     ReleaseDate = DateTime.TryParse(rawgGame.ReleaseDate, out var date) ? date : DateTime.MinValue,
                     Platform = string.Join(", ", platformNames),
-                    Genres = string.Join(", ", genresNames)
+                    Genres = string.Join(", ",  genresNames)
                 };
                 await _gameRepo.AddAsync(game);
             }
@@ -73,7 +76,7 @@ namespace SuppGamesBack.Controllers
             };
             await _favoriteGameRepo.AddAsync(newFavorite);
 
-            return Ok(game); 
+            return Ok(favoriteDto); 
         }
 
 
@@ -109,7 +112,10 @@ namespace SuppGamesBack.Controllers
         public async Task<IActionResult> UnfavoriteGame(int gameId)
         {
             var userId = GetCurrentUserId();
-            if (userId == null) return Unauthorized();
+            if (userId == null) 
+            { 
+                return Unauthorized(); 
+            } 
 
 
             var favoriteToRemove = await _favoriteGameRepo.FindAsync(userId.Value, gameId);

@@ -18,7 +18,7 @@ namespace SuppGamesBack.RawgApi.Models
         public string? ReleaseDate { get; set; }
 
         public List<PlatformContainer>? platforms { get; set; }
-        public List<Genre> genre { get; set; }
+        public List<Genre>? genres { get; set; }
     }
 
     public class PlatformContainer

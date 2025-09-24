@@ -215,6 +215,18 @@
         }
       }
     },
+    "/api/Rawg/random-game": {
+      "get": {
+        "tags": [
+          "Rawg"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Users": {
       "get": {
         "tags": [
