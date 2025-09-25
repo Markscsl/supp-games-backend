@@ -234,7 +234,7 @@ namespace SuppGamesBack.Controllers
                 {
                     Id = favGame.Game.Id,
                     Name = favGame.Game.Name,
-                    ImageUrl = favGame.Game.ImageUrl
+                    ImageUrl = favGame.Game.ImageUrl,
                 }).ToList()
             }).ToList();
 
