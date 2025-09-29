@@ -16,11 +16,16 @@ namespace SuppGamesBack.Data
             return await _context.FavoriteGames.FindAsync(id);
         }
 
-        public async Task<List<FavoriteGame>> GetByUserIdAsync(int userId)
+        public async Task<List<FavoriteGame>> GetByUserIdAsync(int userId, int pageNumber, int pageSize)
         {
+            var itemsToSkip = (pageNumber - 1) * pageSize;
+
             return await _context.FavoriteGames
                 .Include(fg => fg.Game)
                 .Where(fg => fg.UserId == userId && !fg.Excluded)
+                .OrderByDescending(fg => fg.CreateDate)
+                .Skip(itemsToSkip)
+                .Take(pageSize)
                 .ToListAsync();
         }
 

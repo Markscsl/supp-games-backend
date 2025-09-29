@@ -7,7 +7,7 @@ namespace SuppGamesBack.Data
     public interface IFavoriteGameRepository
     {
         Task<FavoriteGame?> GetByIdAsync(int id); 
-        Task<List<FavoriteGame>> GetByUserIdAsync(int userId);
+        Task<List<FavoriteGame>> GetByUserIdAsync(int userId, int pageNumber, int pageSize);
         Task<FavoriteGame?> FindAsync(int userId, int gameId);
         Task<bool> ExistsAsync(int userId, int gameId);
         Task<FavoriteGame> AddAsync(FavoriteGame favoriteGame);

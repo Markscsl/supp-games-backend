@@ -90,7 +90,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFavoriteGameRepository, FavoriteGameRepository>();
 builder.Services.AddScoped<IAnnotationRepository, AnnotationRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
-
+builder.Services.AddSingleton<IImageService, ImageService>();
 
 var app = builder.Build();
 

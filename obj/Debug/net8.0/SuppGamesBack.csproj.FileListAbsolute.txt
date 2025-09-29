@@ -78,4 +78,6 @@ C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\bin\Debug\net8.0\ru
 C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\obj\Debug\net8.0\SuppGamesBack.sourcelink.json
 C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\bin\Debug\net8.0\CloudinaryDotNet.dll
+C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\74933\OneDrive\Projetos\SuppGamesBack\SuppGamesBack\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

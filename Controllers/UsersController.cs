@@ -15,7 +15,7 @@ namespace SuppGamesBack.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
-
+        private readonly IImageService _imageService;
         private int? GetCurrentUser()
         {
             var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -27,10 +27,11 @@ namespace SuppGamesBack.Controllers
 
             return null;
         }
-        public UsersController(IUserRepository userRepository, ITokenService tokenService)
+        public UsersController(IUserRepository userRepository, ITokenService tokenService, IImageService imageService)
         {
             _tokenService = tokenService;
             _userRepository = userRepository;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -234,7 +235,7 @@ namespace SuppGamesBack.Controllers
                 {
                     Id = favGame.Game.Id,
                     Name = favGame.Game.Name,
-                    ImageUrl = favGame.Game.ImageUrl,
+                    ImageUrl = _imageService.TransformUrl(favGame.Game.ImageUrl, 150, 100),
                 }).ToList()
             }).ToList();
 

@@ -13,6 +13,7 @@ namespace SuppGamesBack.Controllers
     [Authorize]
     public class FavoriteGamesController : ControllerBase
     {
+        private readonly IImageService _imageService;
         private readonly IFavoriteGameRepository _favoriteGameRepo;
         private readonly IGameRepository _gameRepo; 
         private readonly IRawgClient _rawgClient;
@@ -20,11 +21,13 @@ namespace SuppGamesBack.Controllers
         public FavoriteGamesController(
             IFavoriteGameRepository favoriteGameRepository,
             IGameRepository gameRepository,
-            IRawgClient rawgClient)
+            IRawgClient rawgClient,
+            IImageService imageService)
         {
             _favoriteGameRepo = favoriteGameRepository;
             _gameRepo = gameRepository;
             _rawgClient = rawgClient;
+            _imageService = imageService;
         }
 
 
@@ -81,7 +84,8 @@ namespace SuppGamesBack.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetMyFavoriteGames()
+        [Authorize]
+        public async Task<IActionResult> GetMyFavoriteGames([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 12)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
@@ -89,7 +93,7 @@ namespace SuppGamesBack.Controllers
                 return Unauthorized();
             }
 
-            var favoriteGames = await _favoriteGameRepo.GetByUserIdAsync(userId.Value);
+            var favoriteGames = await _favoriteGameRepo.GetByUserIdAsync(userId.Value, pageNumber, pageSize);
 
   
             var response = favoriteGames.Select(fg => new GameResponseDTO
@@ -98,7 +102,7 @@ namespace SuppGamesBack.Controllers
                 Name = fg.Game.Name,
                 Slug = fg.Game.Slug,
                 Description = fg.Game.Description,
-                ImageUrl = fg.Game.ImageUrl,
+                ImageUrl = _imageService.TransformUrl(fg.Game.ImageUrl, 400, 300),
                 ReleaseDate = fg.Game.ReleaseDate,
                 Platform = fg.Game.Platform,
                 Genres = fg.Game.Genres
@@ -109,6 +113,7 @@ namespace SuppGamesBack.Controllers
 
 
         [HttpDelete("{gameId}")]
+        [Authorize]
         public async Task<IActionResult> UnfavoriteGame(int gameId)
         {
             var userId = GetCurrentUserId();
