@@ -95,18 +95,30 @@ namespace SuppGamesBack.Controllers
 
             var favoriteGames = await _favoriteGameRepo.GetByUserIdAsync(userId.Value, pageNumber, pageSize);
 
-  
-            var response = favoriteGames.Select(fg => new GameResponseDTO
+
+            var response = favoriteGames.Select(fav => new MyFavoriteGameDTO
             {
-                Id = fg.Game.Id,
-                Name = fg.Game.Name,
-                Slug = fg.Game.Slug,
-                Description = fg.Game.Description,
-                ImageUrl = _imageService.TransformUrl(fg.Game.ImageUrl, 400, 300),
-                ReleaseDate = fg.Game.ReleaseDate,
-                Platform = fg.Game.Platform,
-                Genres = fg.Game.Genres
-            });
+                Id = fav.Id, // O ID da relação
+                Game = new GameResponseDTO
+                {
+                    Id = fav.Game.Id,
+                    Name = fav.Game.Name,
+                    Slug = fav.Game.Slug,
+                    Description = fav.Game.Description,
+                    ImageUrl = _imageService.TransformUrl(fav.Game.ImageUrl, 400, 300),
+                    ReleaseDate = fav.Game.ReleaseDate,
+                    Platform = fav.Game.Platform,
+                    Genres = fav.Game.Genres
+                },
+                Annotations = fav.Annotations.Select(anot => new AnnotationResponseDTO
+                {
+                    Id = anot.Id,
+                    FavoriteGameId = anot.FavoriteGameId,
+                    Text = anot.Text,
+                    CreatedDateAt = anot.CreateDateAt,
+                    LastUpdateAt = anot.LastUpdatedAt
+                }).ToList()
+            }).ToList();
 
             return Ok(response);
         }

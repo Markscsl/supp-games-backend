@@ -76,20 +76,30 @@ namespace SuppGamesBack.Services
                 return DailyGameCache.CachedGame;
             }
 
-
             var random = new Random(DateTime.Today.DayOfYear);
-            int randomIndex = random.Next(0, _curatedGameSlugs.Count);
-            string dailySlug = _curatedGameSlugs[randomIndex];
 
-            var gameOfTheDay = await GetGameBySlugAsync(dailySlug);
+            var dailyShuffledSlugs = _curatedGameSlugs.OrderBy(s => random.Next()).ToList();
 
-            if (gameOfTheDay != null)
+            foreach (var slug in dailyShuffledSlugs)
             {
-                DailyGameCache.CachedGame = gameOfTheDay;
-                DailyGameCache.CacheDate = DateTime.Today;
+                try
+                {
+                    var gameOfTheDay = await GetGameBySlugAsync(slug);
+
+                    if (gameOfTheDay != null)
+                    {
+                        DailyGameCache.CachedGame = gameOfTheDay;
+                        DailyGameCache.CacheDate = DateTime.Today;
+                        return gameOfTheDay;
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    Console.WriteLine($"Falha ao buscar o slug '{slug}'. Tentando o próximo...");
+                }
             }
 
-            return gameOfTheDay;
+            return null;
         }
 
     }

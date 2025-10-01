@@ -22,6 +22,7 @@ namespace SuppGamesBack.Data
 
             return await _context.FavoriteGames
                 .Include(fg => fg.Game)
+                .Include(fg => fg.Annotations)
                 .Where(fg => fg.UserId == userId && !fg.Excluded)
                 .OrderByDescending(fg => fg.CreateDate)
                 .Skip(itemsToSkip)

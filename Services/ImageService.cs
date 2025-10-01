@@ -8,11 +8,14 @@ namespace SuppGamesBack.Services
     public class ImageService : IImageService
     {
         private readonly Cloudinary _cloudinary;
+        private readonly string _cloudName;
 
         public ImageService(IConfiguration configuration)
         {
+            _cloudName = configuration["Cloudinary:CloudName"];
+
             var account = new Account(
-                configuration["Cloudinary:CloudName"],
+                _cloudName,
                 configuration["Cloudinary:ApiKey"],
                 configuration["Cloudinary:ApiSecret"]);
             
@@ -25,6 +28,11 @@ namespace SuppGamesBack.Services
             {
                 // Retorna uma URL de placeholder se a imagem for nula ou vazia
                 return "https://via.placeholder.com/400x300.png?text=No+Image";
+            }
+
+            if (imageUrl.Contains("res.cloudinary.com"))
+            {
+                return imageUrl;
             }
 
             // --- A CORREÇÃO PRINCIPAL ESTÁ AQUI ---
