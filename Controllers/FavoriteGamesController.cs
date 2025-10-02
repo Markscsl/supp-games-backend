@@ -64,6 +64,18 @@ namespace SuppGamesBack.Controllers
                 await _gameRepo.AddAsync(game);
             }
 
+            var responseDto = new GameResponseDTO
+            {
+                Id = game.Id,
+                Name = game.Name,
+                Slug = game.Slug,
+                Description = game.Description,
+                ImageUrl = _imageService.TransformUrl(game.ImageUrl, 400, 300),
+                ReleaseDate = game.ReleaseDate,
+                Platform = game.Platform,
+                Genres = game.Genres
+            };
+
 
             if (await _favoriteGameRepo.ExistsAsync(userId.Value, game.Id))
             {
@@ -79,7 +91,7 @@ namespace SuppGamesBack.Controllers
             };
             await _favoriteGameRepo.AddAsync(newFavorite);
 
-            return Ok(favoriteDto); 
+            return Ok(responseDto); 
         }
 
 
