@@ -133,7 +133,9 @@ namespace SuppGamesBack.Controllers
 
             await _userRepository.UpdateAsync(existingUser);
 
-            return NoContent();
+            var newToken = _tokenService.CreateToken(existingUser);
+
+            return Ok(new { token = newToken });
         }
 
         [HttpPut("deactivate/{id}")]
