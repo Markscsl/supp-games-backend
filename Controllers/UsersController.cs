@@ -18,7 +18,7 @@ namespace SuppGamesBack.Controllers
         private readonly IImageService _imageService;
         private int? GetCurrentUser()
         {
-            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (int.TryParse(userIdString, out var userId))
             {
